@@ -18,9 +18,7 @@
     <div class="wrapper">
         <h1 class="heading">Twoje quizy:</h1>
         <p>Brak quizów</p>
-        <ul class="quizes">
-            <li class="quiz"></li>
-        </ul>
+        <ul class="quizes-list"></ul>
         <button class="open-modal-btn">Dodaj quiz <i class="fa-solid fa-plus"></i></button>
     </div>
 
@@ -29,15 +27,21 @@
         <h2 class="modal-title">Stwórz quiz</h2>
 
         <div class="input-group">
+            <label for="" class="modal-label">Nazwa:</label>
+            <input type="text" class="modal-input name-input">
+        </div>
+        <div class="input-group hide">
             <label for="" class="modal-label">Pytanie:</label>
             <input type="text" class="modal-input question-input">
         </div>
-        <div class="input-group">
+        <div class="input-group hide">
             <label for="" class="modal-label">Odpowiedź:</label>
             <input type="text" class="modal-input answer-input">
         </div>
+        <p class="modal-error"></p>
         <div class="modal-button-end">
-            <button class="modal-btn">Dodaj</button>
+            <button class="modal-next-btn">Dalej <i class="fa-solid fa-chevron-right"></i></button>
+            <button class="modal-create-btn hide">Dodaj <i class="fa-solid fa-plus"></i></button>
         </div>
     </div>
 
