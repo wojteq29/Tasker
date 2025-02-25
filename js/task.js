@@ -6,8 +6,8 @@ const anwserIcon = document.querySelector('.fa-eye')
 const progress = document.querySelector('.progress')
 const error = document.querySelector('.error')
 
-let questionWords = ['koń', 'gruszka', 'banan', 'brzoskwinia']
-let answerWords = ['horse', 'Pear', 'banana', 'peach']
+let questionWords = JSON.parse(localStorage.getItem('questions'))
+let answerWords = JSON.parse(localStorage.getItem('answers'))
 let wordStartIndex = 0
 
 const fillWord = () => {
@@ -20,7 +20,6 @@ const fillWord = () => {
 
 const changeWord = () => {
 	let updatedIndex = ++wordStartIndex
-	console.log(updatedIndex)
 	questionP.textContent = questionWords[wordStartIndex]
 	progress.textContent = `${updatedIndex}/${questionWords.length}`
 	if (updatedIndex === questionWords.length) {
@@ -37,14 +36,16 @@ const checkWord = () => {
 		changeWord()
 	} else if (wordInput.value === '') {
 		error.textContent = 'Musisz wpisać tekst!'
+
+		setTimeout(() => {
+			error.textContent = ''
+		}, 5000)
 	} else {
 		error.textContent = 'Niepoprawna odpowiedź!'
-	}
-}
 
-const enterKey = e => {
-	if (e.key === 'Enter') {
-		checkWord()
+		setTimeout(() => {
+			error.textContent = ''
+		}, 5000)
 	}
 }
 
@@ -60,6 +61,12 @@ const showHint = () => {
 		hintBtn.classList.add('hide')
 		anwserIcon.classList.remove('fa-eye-slash')
 		anwserIcon.classList.add('fa-eye')
+	}
+}
+
+const enterKey = e => {
+	if (e.key === 'Enter') {
+		checkWord()
 	}
 }
 
