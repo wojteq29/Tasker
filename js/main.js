@@ -30,6 +30,8 @@ const deleteModal = document.querySelector('.delete-modal')
 const deleteYesBtn = document.querySelector('.delete-yes-btn')
 const deleteNoBtn = document.querySelector('.delete-no-btn')
 
+const quizInfoSwitchBtn = document.querySelector('.quiz-info-switch-btn')
+
 let questionWords = []
 let answerWords = []
 let quizBtn
@@ -44,12 +46,12 @@ const openModal = () => {
 
 const closeModal = () => {
 	modal.classList.remove('show')
-	nextBtn.classList.remove('hide-modal')
-	addBtn.classList.add('hide-modal')
-	backBtn.classList.add('hide-modal')
-	createBtn.classList.add('hide-modal')
-	inputGroups.forEach(inputGroup => inputGroup.classList.add('hide-modal'))
-	inputGroupName.classList.remove('hide-modal')
+	nextBtn.classList.remove('hide')
+	addBtn.classList.add('hide')
+	backBtn.classList.add('hide')
+	createBtn.classList.add('hide')
+	inputGroups.forEach(inputGroup => inputGroup.classList.add('hide'))
+	inputGroupName.classList.remove('hide')
 	modalSuccess.textContent = ''
 	modalError.textContent = ''
 }
@@ -62,19 +64,19 @@ const checkQuiz = () => {
 		quizBtn.classList.add('quiz-btn')
 		quizBtn.textContent = quizName
 		divLink.append(quizBtn)
-		openModalBtn.classList.add('hide-modal')
+		openModalBtn.classList.add('hide')
 	}
 }
 
 const addQuizName = () => {
 	if (nameInput.value.trim()) {
-		inputGroups.forEach(inputGroup => inputGroup.classList.toggle('hide-modal'))
-		nextBtn.classList.toggle('hide-modal')
-		addBtn.classList.toggle('hide-modal')
-		backBtn.classList.toggle('hide-modal')
+		inputGroups.forEach(inputGroup => inputGroup.classList.toggle('hide'))
+		nextBtn.classList.toggle('hide')
+		addBtn.classList.toggle('hide')
+		backBtn.classList.toggle('hide')
 		modalError.textContent = ''
 		if (questionWords.length > 0) {
-			createBtn.classList.remove('hide-modal')
+			createBtn.classList.remove('hide')
 		}
 	} else {
 		modalError.textContent = 'Musisz uzupełnić pola!'
@@ -86,11 +88,11 @@ const addQuizName = () => {
 }
 
 const backToQuizName = () => {
-	inputGroups.forEach(inputGroup => inputGroup.classList.toggle('hide-modal'))
-	nextBtn.classList.toggle('hide-modal')
-	addBtn.classList.toggle('hide-modal')
-	backBtn.classList.toggle('hide-modal')
-	createBtn.classList.add('hide-modal')
+	inputGroups.forEach(inputGroup => inputGroup.classList.toggle('hide'))
+	nextBtn.classList.toggle('hide')
+	addBtn.classList.toggle('hide')
+	backBtn.classList.toggle('hide')
+	createBtn.classList.add('hide')
 	modalSuccess.textContent = ''
 	modalError.textContent = ''
 	questionInput.value = ''
@@ -101,7 +103,7 @@ const addQuestion = () => {
 	if (questionInput.value.trim() && answerInput.value.trim()) {
 		questionWords.push(questionInput.value)
 		answerWords.push(answerInput.value)
-		createBtn.classList.remove('hide-modal')
+		createBtn.classList.remove('hide')
 		modalSuccess.textContent = 'Dodano element!'
 		modalError.textContent = ''
 		questionInput.value = ''
@@ -125,7 +127,7 @@ const createQuiz = () => {
 	quizBtn.classList.add('quiz-btn')
 	quizBtn.textContent = nameInput.value
 	divLink.append(quizBtn)
-	openModalBtn.classList.add('hide-modal')
+	openModalBtn.classList.add('hide')
 	modalSuccess.textContent = ''
 	modalError.textContent = ''
 	closeModal()
@@ -195,7 +197,7 @@ const quizInfoAddLi = () => {
 		localStorage.setItem('questions', JSON.stringify(questionWords))
 		localStorage.setItem('answers', JSON.stringify(answerWords))
 
-		quizInfoPlayBtn.classList.remove('hide-modal')
+		quizInfoPlayBtn.classList.remove('hide')
 		quizInfoSuccess.textContent = 'Dodano element!'
 		quizInfoError.textContent = ''
 		quizInfoAddQuestion.value = ''
@@ -223,7 +225,7 @@ const deleteQuizYes = () => {
 	questionWords = []
 	answerWords = []
 	deleteModal.classList.remove('show')
-	openModalBtn.classList.remove('hide-modal')
+	openModalBtn.classList.remove('hide')
 	taskList.innerHTML = ''
 	nameInput.value = ''
 	questionInput.value = ''
@@ -237,6 +239,35 @@ const deleteQuizNo = () => {
 	quizInfo.classList.add('show')
 	quizInfoSuccess.textContent = ''
 	quizInfoError.textContent = ''
+}
+
+const switchQuestionAnswer = () => {
+	questionWords = JSON.parse(localStorage.getItem('questions'))
+	answerWords = JSON.parse(localStorage.getItem('answers'))
+
+	let switchQuestionWords = answerWords
+	let switchAnswerWords = questionWords
+
+	taskList.textContent = ''
+	for (i = 0; i < questionWords.length; i++) {
+		taskLi = document.createElement('li')
+		taskLi.id = i
+		taskLi.innerHTML = `<b>Pytanie:</b> ${switchQuestionWords[i]}<br><b>Odpowiedź:</b> ${switchAnswerWords[i]}`
+		taskList.append(taskLi)
+
+		editBtn = document.createElement('button')
+		editBtn.classList.add('edit-btn')
+		editBtn.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>'
+		taskLi.append(editBtn)
+
+		deleteBtn = document.createElement('button')
+		deleteBtn.classList.add('delete-btn')
+		deleteBtn.innerHTML = '<i class="fa-regular fa-trash-can"></i>'
+		taskLi.append(deleteBtn)
+	}
+
+	localStorage.setItem('questions', JSON.stringify(switchQuestionWords))
+	localStorage.setItem('answers', JSON.stringify(switchAnswerWords))
 }
 
 const deleteTask = e => {
@@ -275,7 +306,7 @@ const deleteTask = e => {
 		localStorage.setItem('answers', JSON.stringify(answerWords))
 
 		if (questionWords.length === 0) {
-			quizInfoPlayBtn.classList.add('hide-modal')
+			quizInfoPlayBtn.classList.add('hide')
 		}
 	}
 }
@@ -378,6 +409,12 @@ const enterAddQuestion = e => {
 	}
 }
 
+const enterAddQuizInfo = e => {
+	if (e.key === 'Enter') {
+		quizInfoAddLi()
+	}
+}
+
 document.addEventListener('DOMContentLoaded', checkQuiz)
 document.body.addEventListener('click', quizInfoModal)
 document.body.addEventListener('click', deleteTask)
@@ -398,8 +435,11 @@ quizInfoAddBtn.addEventListener('click', quizInfoAddLi)
 quizInfoDeleteBtn.addEventListener('click', deleteQuiz)
 deleteNoBtn.addEventListener('click', deleteQuizNo)
 deleteYesBtn.addEventListener('click', deleteQuizYes)
+quizInfoSwitchBtn.addEventListener('click', switchQuestionAnswer)
+quizInfoAddQuestion.addEventListener('keydown', enterAddQuizInfo)
+quizInfoAddAnswer.addEventListener('keydown', enterAddQuizInfo)
 
-// 1.
-
-// 4. narzędzia quizów (edytuj, usuń)
-// 5. podstrona zakończenia quizu
+// 4. funkcja potasuj
+// 5. funkcja podziel na umiem i nie umiem
+// 6. funkcja zagraj ponownie
+// 7. podstrona zakończenia quizu
